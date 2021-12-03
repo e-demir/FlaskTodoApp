@@ -13,9 +13,42 @@
     <title>What To Do</title>
   </head>
   <body>
-    <div style="margin-top: 100px;" class="container">
-    <h3>ToDo List</h3>
-    <table class="table">
+    <div style="margin-top: 100px" class="container">
+      <h3>Görevler</h3>
+      <hr />
+      <form action="/add" method="post">
+        <div class="form-group">
+          <label for="formGroupExampleInput">Görev Başlığı</label>
+          <input
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput"
+            placeholder="Başlık..."
+            name="title"
+          />
+        </div>
+        <div class="form-group">
+          <label for="formGroupExampleInput2">Görev İçeriği</label>
+          <textarea
+            type="text"
+            class="form-control"
+            id="formGroupExampleInput2"
+            placeholder="İçerik..."
+            name="content"
+          ></textarea>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary btn-lg">Ekle</button>
+      </form>
+      <br />      
+
+      {% if count == 0 %}
+      <div class="alert alert-danger" role="alert">Hiç bir kayıt yok.</div>
+      {% else %}
+      <div class="alert alert-primary" role="alert">
+        Toplam Görev Sayısı : {{count}}        
+      </div>      
+      <table class="table">
         <thead>
           <tr>
             <th scope="col">Sıra</th>
@@ -27,11 +60,40 @@
           </tr>
         </thead>
         <tbody>
-         
+          {% for item in todos %}
+          <tr>
+            <th scope="row">{{item.id}}</th>
+            <td><a href="detail/{{item.id}}">{{item.title}}</a> </td>
+            <td>{{item.content}}</td>
+            {% if item.complete == False %}
+            <td>Olmamış :(</td>
+            {% else %}
+            <td>Bu iş tamam!</td>
+            {% endif %} 
+            {% if item.complete == False %}
+            <td>
+              <a href="/complete/{{item.id}}" class="btn btn-success"
+                >Tamamla</a
+              >
+            </td>
+            {% else %}
+            <td>
+              <a href="/complete/{{item.id}}" class="btn btn-warning"
+                >İptal Et</a
+              >
+            </td>
+            {% endif %}
+            <td>
+              <a href="/delete/{{item.id}}" class="btn btn-danger">Sil</a>
+            </td>
+          </tr>
+          {% endfor %}
         </tbody>
       </table>
+      {% endif %}
+      <br />
+     
     </div>
-    <hr />
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
